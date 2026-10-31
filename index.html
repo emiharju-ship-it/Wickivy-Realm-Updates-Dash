@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wickivy Minecraft Updates Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wickivy: {
+                            bg: '#FAF7F2',
+                            card: '#FFFFFF',
+                            lavender: '#EADBFC',
+                            pink: '#FDE2E4',
+                            mint: '#E2F0CB',
+                            butter: '#FFF1C5',
+                            purple: '#A882DD',
+                            purpleDark: '#7856AD',
+                            text: '#4A3E56',
+                            muted: '#8C7A9C'
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        quicksand: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #FAF7F2;
+            color: #4A3E56;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #FAF7F2;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #EADBFC;
+            border-radius: 10px;
+        }
+        .event-card.hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Header & Top Navigation -->
+    <header class="bg-white border-b border-purple-100 shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-xl shadow-inner">
+                    <i class="fa-solid font-bold fa-heart"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-wickivy-purpleDark tracking-wide">Wickivy Updates Dashboard</h1>
+                    <p class="text-xs text-wickivy-muted font-medium">Seasonal Events & Roadmap</p>
+                </div>
+            </div>
+
+            <!-- Server Status Badge -->
+            <div class="bg-wickivy-pink px-4 py-2 rounded-2xl border border-rose-200 text-rose-900 text-xs font-semibold flex items-center space-x-2 shadow-xs">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                <span>Minecraft Status: Offline</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Sidebar Navigation & Quick Links -->
+        <aside class="lg:col-span-3 space-y-4">
+            <!-- Event Selector -->
+            <div class="bg-white rounded-3xl p-4 border border-purple-100 shadow-sm">
+                <h2 class="text-sm font-bold text-wickivy-muted uppercase tracking-wider mb-3 px-2">Seasonal Events</h2>
+                <nav class="space-y-1.5">
+                    <button onclick="switchEvent('valentine')" id="nav-valentine" class="event-btn w-full text-left px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-between bg-wickivy-pink text-rose-800">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-heart text-sm text-rose-500"></i> Valentine's</span>
+                        <span class="text-[10px] bg-white text-rose-900 font-bold px-2 py-0.5 rounded-full">14.2</span>
+                    </button>
+                    <button onclick="switchEvent('easter')" id="nav-easter" class="event-btn w-full text-left px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-between text-wickivy-text hover:bg-wickivy-mint/50">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-egg text-sm text-emerald-500"></i> Easter</span>
+                        <span class="text-[10px] bg-wickivy-lavender/50 text-wickivy-purpleDark font-bold px-2 py-0.5 rounded-full">5.4</span>
+                    </button>
+                    <button onclick="switchEvent('halloween')" id="nav-halloween" class="event-btn w-full text-left px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-between text-wickivy-text hover:bg-wickivy-butter/50">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-ghost text-sm text-amber-600"></i> Halloween</span>
+                        <span class="text-[10px] bg-wickivy-lavender/50 text-wickivy-purpleDark font-bold px-2 py-0.5 rounded-full">31.10</span>
+                    </button>
+                    <button onclick="switchEvent('christmas')" id="nav-christmas" class="event-btn w-full text-left px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-between text-wickivy-text hover:bg-wickivy-lavender/50">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-snowflake text-sm text-sky-500"></i> Christmas</span>
+                        <span class="text-[10px] bg-wickivy-lavender/50 text-wickivy-purpleDark font-bold px-2 py-0.5 rounded-full">1.12</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-wickivy-butter/60 rounded-3xl p-4 border border-amber-200 shadow-sm space-y-3">
+                <h3 class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-bolt"></i> Related Dashboards
+                </h3>
+                <div class="space-y-2 text-xs">
+                    <a href="https://emiharju-ship-it.github.io/Wickivy-Realm-DashB/" target="_blank" class="block bg-white/80 hover:bg-white p-2.5 rounded-xl border border-amber-200 text-amber-900 font-semibold transition-all flex items-center justify-between">
+                        <span>Realm Dashboard</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                    <a href="https://emiharju-ship-it.github.io/Wickivy-Guild-dash/" target="_blank" class="block bg-white/80 hover:bg-white p-2.5 rounded-xl border border-amber-200 text-amber-900 font-semibold transition-all flex items-center justify-between">
+                        <span>Guild Dashboard</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                    <a href="https://emiharju-ship-it.github.io/Wickivy-Staff-Dashboard/" target="_blank" class="block bg-white/80 hover:bg-white p-2.5 rounded-xl border border-amber-200 text-amber-900 font-semibold transition-all flex items-center justify-between">
+                        <span>Staff Command</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Section -->
+        <section class="lg:col-span-9 space-y-6">
+
+            <!-- EVENT 1: VALENTINE'S UPDATE -->
+            <div id="valentine" class="event-card space-y-6">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-rose-100 via-wickivy-pink to-wickivy-lavender p-6 rounded-3xl border border-rose-200 shadow-sm relative overflow-hidden">
+                    <div class="max-w-xl relative z-10">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-white/90 text-rose-700 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Seasonal Event • 2 Weeks</span>
+                            <span class="bg-rose-500 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs"><i class="fa-solid fa-calendar mr-1"></i> Launch: 14.2</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-rose-900 mt-2 mb-2">Valentine's Event 💖</h2>
+                        <p class="text-xs text-rose-800 leading-relaxed">
+                            Celebrate love and friendship in Wickivy! Collect daily rewards, compete on the Valentine leaderboard, earn custom duo titles, hunt for heart treasure chests, and enjoy cozy dating gazebo spots!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-lg font-bold">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Daily Valentine Rewards</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Log in every day during the 2-week event to claim sweet daily gifts, heart tokens, event crates, and special cosmetics!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-lg font-bold">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Valentine Leaderboard</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Compete with the community! Top treasure hunters and parkour duos climb the live event leaderboard for grand prizes.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-lg font-bold">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Couple & Friendship Titles</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Unlock exclusive in-game chat tags and prefixes like <em>[Soulmates]</em>, <em>[Besties]</em>, <em>[Dynamic Duo]</em>, and <em>[Cupid]</em>!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-lg font-bold">
+                            <i class="fa-solid fa-gem"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Heart Treasure Hunt</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Find hidden Valentine chests scattered across spawn and the world to earn special limited-time rewards and heart decor blocks!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-lg font-bold">
+                            <i class="fa-solid fa-campground"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Cozy Dating Gazebo Spots</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Beautifully designed romantic gazebo areas around spawn for duos and friends to hang out, take screenshots, and relax.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-pink flex items-center justify-center text-rose-500 text-lg font-bold">
+                            <i class="fa-solid fa-person-running"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Couple Parkour Course & Pink Particles</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Duo-based parkour course paired with custom pink & heart particle transformations around spawn!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENT 2: EASTER UPDATE -->
+            <div id="easter" class="event-card hidden space-y-6">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-emerald-100 via-wickivy-mint to-wickivy-butter p-6 rounded-3xl border border-emerald-200 shadow-sm relative overflow-hidden">
+                    <div class="max-w-xl relative z-10">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-white/80 text-emerald-800 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Seasonal Event • 2 Weeks</span>
+                            <span class="bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs"><i class="fa-solid fa-calendar mr-1"></i> Launch: 5.4</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-emerald-900 mt-2 mb-2">Easter Spring Celebration 🐣</h2>
+                        <p class="text-xs text-emerald-800 leading-relaxed">
+                            Spring has blossomed at Wickivy! Collect Easter eggs in your basket, find the legendary Golden Egg, rescue lost baby chicks, unlock special event achievements, and claim daily login rewards!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-mint flex items-center justify-center text-emerald-600 text-lg font-bold">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Easter Basket & Egg Collection</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Fill your portable Easter Basket with unique painted eggs found around the server to trade for spring items and cosmetics!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-mint flex items-center justify-center text-emerald-600 text-lg font-bold">
+                            <i class="fa-solid fa-egg"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Map-Wide Easter Egg Hunt</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Explore spawn and public realms to discover hidden colorful eggs tucked away in trees, caves, and secret nooks!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-mint flex items-center justify-center text-emerald-600 text-lg font-bold">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Golden Egg Hunt</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            A legendary single Golden Egg spawns in a new hidden location every day! The first player to find it wins grand prizes.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-mint flex items-center justify-center text-emerald-600 text-lg font-bold">
+                            <i class="fa-solid fa-kiwi-bird"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Chick Rescue Quest</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Help Mama Hen find her missing baby chicks lost across the world! Bring them back safely to unlock cute chick pets.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-mint flex items-center justify-center text-emerald-600 text-lg font-bold">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Special Easter Achievements</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Complete limited-time event challenges to unlock exclusive badges, titles like <em>[Egg-cellent]</em>, and custom armor trims!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-mint flex items-center justify-center text-emerald-600 text-lg font-bold">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Easter Daily Login Rewards</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Claim daily spring rewards throughout the 2-week event, including bunny ears, spring flowers, and event keys!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENT 3: HALLOWEEN UPDATE -->
+            <div id="halloween" class="event-card hidden space-y-6">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-amber-100 via-wickivy-butter to-wickivy-pink p-6 rounded-3xl border border-amber-200 shadow-sm relative overflow-hidden">
+                    <div class="max-w-xl relative z-10">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-white/80 text-amber-800 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Seasonal Event • 2 Weeks</span>
+                            <span class="bg-amber-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs"><i class="fa-solid fa-calendar mr-1"></i> Launch: 31.10</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-amber-900 mt-2 mb-2">Spooky Halloween Bash 🎃</h2>
+                        <p class="text-xs text-amber-800 leading-relaxed">
+                            Spooky season has arrived at Wickivy! Go trick-or-treating, hunt for hidden ghosts and pumpkins, brave the haunted maze, survive mob waves, find the rare Black Cat, and unlock haunted titles!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-butter flex items-center justify-center text-amber-600 text-lg font-bold">
+                            <i class="fa-solid fa-candy-cane"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Trick or Treat Houses</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Visit decorated NPC houses across spawn to knock on doors and collect sweet candy treats, trick traps, and special event tokens!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-butter flex items-center justify-center text-amber-600 text-lg font-bold">
+                            <i class="fa-solid fa-ghost"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Map-Wide Ghost Hunt</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Spooky specters have haunted the map! Search around spawn and secret landmarks to find hidden ghosts for Halloween rewards.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-butter flex items-center justify-center text-amber-600 text-lg font-bold">
+                            <i class="fa-solid fa-dungeon"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Haunted Maze Challenge</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Navigate the creepy, dark hedge maze filled with jump scares, hidden traps, and loot chests waiting at the exit.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-butter flex items-center justify-center text-amber-600 text-lg font-bold">
+                            <i class="fa-solid fa-skull"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Pumpkin Hunt & Monster Survival</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Find hidden jack-o'-lanterns around the world and test your combat skills against challenging waves of Halloween event mobs!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-butter flex items-center justify-center text-amber-600 text-lg font-bold">
+                            <i class="fa-solid fa-cat"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">The Black Cat Quest</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Track down the rare, magical Black Cat roaming the map. Tame or find it to unlock exclusive feline cosmetics and lucky charms!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-butter flex items-center justify-center text-amber-600 text-lg font-bold">
+                            <i class="fa-solid fa-mask"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Spooky World Layout & Haunted Titles</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Full dark pumpkin & web spawn aesthetic paired with collectible haunted titles like <em>[Phantom]</em>, <em>[Witch]</em>, and <em>[Spooky]</em>!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENT 4: CHRISTMAS UPDATE -->
+            <div id="christmas" class="event-card hidden space-y-6">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-sky-100 via-wickivy-lavender to-wickivy-pink p-6 rounded-3xl border border-sky-200 shadow-sm relative overflow-hidden">
+                    <div class="max-w-xl relative z-10">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-white/80 text-sky-800 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Major Festival • 24 Days</span>
+                            <span class="bg-sky-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs"><i class="fa-solid fa-calendar mr-1"></i> Advent Launch: 1.12</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-sky-900 mt-2 mb-2">Winter Wonderland Festival ❄️</h2>
+                        <p class="text-xs text-sky-800 leading-relaxed">
+                            Our biggest celebration of the year! Enjoy 24 days of calendar rewards starting Dec 1st, marvel at the giant Christmas tree, hunt for wrapped presents, rescue Santa's lost reindeer, and unlock exclusive December titles!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-lavender flex items-center justify-center text-sky-600 text-lg font-bold">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">24-Day Calendar Rewards (Launch 1.12)</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Log in daily from December 1st through 24th to open advent doors at spawn containing exclusive keys, coins, and winter items!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-lavender flex items-center justify-center text-sky-600 text-lg font-bold">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Giant Christmas Tree & Snowy Layout</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            A towering, decorated spruce tree stands at spawn surrounded by falling snow particles, ice skating rinks, and holiday lights!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-lavender flex items-center justify-center text-sky-600 text-lg font-bold">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Map-Wide Present Hunt</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Santa dropped wrapped gift boxes all over the server! Search everywhere around spawn and public zones to collect secret presents.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-lavender flex items-center justify-center text-sky-600 text-lg font-bold">
+                            <i class="fa-solid fa-holly-berry"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Reindeer Rescue Quest</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Santa's 9 reindeer got lost in winter blizzards! Track them down and bring them back home to earn special festive pets and hats.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-lavender flex items-center justify-center text-sky-600 text-lg font-bold">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Christmas Achievements</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Complete limited-time holiday challenges such as building snowmen, winning ice races, and completing advent streaks!
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-sm space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-wickivy-lavender flex items-center justify-center text-sky-600 text-lg font-bold">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-wickivy-purpleDark">Exclusive December Titles</h3>
+                        <p class="text-xs text-wickivy-muted leading-relaxed">
+                            Unlock limited-edition chat tags and prefixes like <em>[Frosty]</em>, <em>[Elf]</em>, <em>[Santa's Helper]</em>, and <em>[Jolly]</em>!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function switchEvent(eventId) {
+            document.querySelectorAll('.event-card').forEach(el => el.classList.add('hidden'));
+            document.getElementById(eventId).classList.remove('hidden');
+
+            document.querySelectorAll('.event-btn').forEach(btn => {
+                btn.classList.remove('bg-wickivy-pink', 'text-rose-800', 'bg-wickivy-mint', 'text-emerald-800', 'bg-wickivy-butter', 'text-amber-800', 'bg-wickivy-lavender', 'text-sky-800');
+                btn.classList.add('text-wickivy-text');
+            });
+
+            const activeBtn = document.getElementById(`nav-${eventId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-wickivy-text');
+                if (eventId === 'valentine') activeBtn.classList.add('bg-wickivy-pink', 'text-rose-800');
+                if (eventId === 'easter') activeBtn.classList.add('bg-wickivy-mint', 'text-emerald-800');
+                if (eventId === 'halloween') activeBtn.classList.add('bg-wickivy-butter', 'text-amber-800');
+                if (eventId === 'christmas') activeBtn.classList.add('bg-wickivy-lavender', 'text-sky-800');
+            }
+        }
+    </script>
+</body>
+</html>
